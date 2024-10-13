@@ -1,0 +1,398 @@
+[Comment]
+"--" single line
+"--[[  ]]--" multiline
+
+[Reserved word]
+and
+elseif
+function
+nil
+return
+while
+
+break
+end
+if
+not
+then
+goto
+
+do
+false
+in
+or
+true
+
+else
+for
+local
+repeat
+until
+
+[Data type]
+nil
+boolean
+number
+string: charaters enclosed by double quotees
+function
+userdata: C data structure in a variable
+thread
+table
+
+<type related function>
+type() --show type of a value
+
+[variable]
+<syntax>
+variable = value
+a, b, c = 1, 2, 3
+x, y, z = 1, 2
+-- if not initialized (given value), value will be nil
+
+[scope]
+-- a variable is global in default
+-- local variable is inside code block
+function block()
+  local b = 20
+end
+-- b can't be accessed outside block()
+
+[string]
+'string' -- declared by single quote
+"string" -- declared by double quote
+[[string]] -- declared by bracket
+"" -- declare an empty string
+
+[Escape Charater]
+\a --beep sound
+\b --backspace, moves cursor one position back
+\f --form feed, change page
+\n --new line
+\r --enter
+\t --tab
+\\ --slash
+\' --single quote
+\" --double quote
+\0 --null
+\ddd --octal character, ddd is three digit
+\xhh --hexadeciaml charater, hh is two digit
+
+<function related to string>
+string.len()
+string.reverse()
+string.format("%fm",data)
+--fm: format
+--data: data of the string
+%c return ascii code number
+%d %i return integer
+%o return octal number, turn a character or digit into octal form
+%x return hex number
+%e return scientific notation
+%f return float number
+%s return a string
+
+string.find(str1,"str2") --return teh first and last index
+string.sub(str, idx1, idx2) --extract substring from idx1 to idx2
+#str --get the length of the string
+string1..string2 --connect two string
+string.rep(str, n) --repeats str n times
+string.lower() --converts to lower case
+string.upper() --to upper case
+string.gsub("string", "a", "b") --repalce a in string with b
+string.byte("character") --convert to ascii code
+string.char(ascii_code) --convert ascii code to charater
+
+[Arithmetical Operators]
++
+-
+*
+/
+%
+^ power
+- change sign (unary)
+
+[Comparison Operators]
+--return true or false
+>
+<
+>=
+<=
+==
+~=
+
+[Logical Operators]
+and
+or
+not
+
+[While Loop]
+while(condition)
+do
+  -- statement
+end
+
+[For Loop]
+for number= startValue, lastValue, stepLength do
+  -- statement
+end
+
+[Iterate Table]
+-- Note that index starts with 1
+myTable = {"A","B","C"}
+for index,value in ipairs(myTable)do
+  --loop body
+end
+
+[Do while]
+repeat
+  --loop body
+until(condition)
+
+[break]
+-- used in loop
+if(condition) then break end
+
+[goto]
+goto label
+::label::
+
+[If Statement]
+if(condition)
+then
+  --statement
+end
+
+[Boolean]
+0 can be true
+nil can be false
+
+[If-else Statement]
+if(condition)
+then
+  -- condition
+else
+  -- condition
+end
+
+[Function]
+<define a function>
+function functionName(arg1, arg2)
+  -- function statement
+  return
+end
+<call a function>
+functionName()
+
+<va list>
+-- use ... to represent uncertain number of arguments
+-- use ipairs to iterate through them
+
+<anonymous function>
+var = function(arg) end
+-- an anonymous function can only be called by the its "var" 
+-- an anonymous function can be passed as argument like function pointer
+-- often used for argument in the following form
+function() end
+
+<numbers of argument of uncertain vairable>
+select("#",...)
+
+[Array]
+array = {value1, value2, value3}
+-- access index value
+array[index]
+
+[Table]
+-- create an empty table
+t = {}
+
+-- append element at end
+t["key"] = value
+t.key = value
+
+-- insert at specific position
+table.insert(t, index, "newElement")
+
+-- initailize
+t = {"value1", "value2"} -- will be auto-indexed from 1
+
+-- access element
+t["key"]
+t.key -- dot notation can only be used for named keys
+
+-- iterate
+for index, value in pairs(table) do
+  -- statement
+end
+-- connect table elements
+table.concat(t, "seperator", startIndex, endIndex)
+
+-- remove element
+table.remove(t, index)
+
+-- sort by alphabet order
+table.sort(t) --sort after remove element
+
+-- length
+#t
+
+-- add function member
+--- method1
+t.func1 = function(arg)
+  -- statement
+end
+
+--- method2
+t["func1"] = function()
+  -- statement
+end
+
+--- method3
+t:func1 = function()
+  -- statement
+end
+
+function t:func1()
+  -- statement
+end
+
+-- access function member
+t.func1()
+
+--------------------------------------------------------------------
+[Module]
+-- module can be imported by other lua
+-- define a module, if defined local, must be loaded as local
+-- it is recommanded to define a module locally
+local module = {}
+function module.func1()
+  -- statement
+end
+function module.func2()
+  -- statement
+end
+return module -- return the table to be used as a module
+
+-- load a module
+local mymodule = require("module") -- import the module
+mymodule.func1()
+mymodule.func2()
+--------------------------------------------------------------------
+[Garbage Collection]
+collectgarbage("collect") -- do a complete garbage collection
+collectgarbage("count") -- returns total memory k bytes used by the lua
+collectgarbage("restart")
+collectgarbage("interval") -- see the interval rate of the collector
+collectgarbage("step") -- run the garbage collector step by step
+collectgarbage("stop")
+--------------------------------------------------------------------
+[MetaTable]
+-- metatable is just table that (may or may not ) contains metamethods. A table will be referred to as metatable if and only if it is used as the second argument of function  setmetatable
+ 
+getmetatable() -- return the metatable of an object
+setmetatable() -- if the metatable keys already exist, this function will fail
+
+-- methods
+__index -- when an index is invalid, lua will call metamethods __index in the metatable, if __index contains a table, lua will search it for the index, if __index contains a function, lua will call that function  
+metatable = {}
+metatable["__index"] = function()
+  -- statement
+end
+
+__call -- use table name as function
+metatable["__call"] = function(self) -- self could be replaced by the name of table
+end
+-- statement
+
+__newindex
+
+__tostring: operate the table content in a string format, like print
+
+Meta_Methods: overload operator
+__add
+__sub
+__mul
+__div
+__mod
+__unm
+__concat
+__eq
+__lt
+__le
+__pow
+__len
+__metatable
+
+[File I/O]
+file = io.open(filename, mode)
+Mode | Purpose
+r | read only
+w | write only
+a | append contents
+r+| read or write
+w+| write or read
+a+| append or read
+b | binary operation
+-- Methods
+io.output(file)
+io.write()
+io.close()
+
+-- read file
+io.input()
+io.read("arg")
+-- "arg"
+*a read all content
+*l read the line
+--------------------------------------------------------------------
+[Process Multiple Files]
+file = io.open("filename", "mode")
+
+file:write()
+
+file:close()
+
+file:read()
+
+-- manipulate the file pointer
+file.seek("set/cur/end", offset)
+"set": seek string from the beginning
+"cur": seek from current location
+"end": seek from end
+--------------------------------------------------------------------
+[Class]
+-- class is not a built-inp type in lua.
+-- class "type" is realised by table type in lua 
+-- You should only define methods in "class table", and put both declaration and definition of data members inside constructor to avoid polluting.
+-- only put static data member in "class" (the metatable of instances)
+ClassName={
+property1 = value1,
+property2 = value2,
+method = function(self)
+  print("method called. property1 is: "..self.property1)
+end
+}
+
+ClassName.__index = Classname
+--------------------------------------------------------------------
+[Object]
+-- in lua, object, property and function can be described by "table" and "metatable"
+-- constructor
+function ClassName:constructor()
+  obj = {}
+  setmetatable(obj, ClassName)
+  ClassName.property1 = value1
+  ClassName.property2 = value2
+  return obj
+end
+
+obj = ClassName:constructor()
+
+-- property
+obj.property
+
+-- method
+--- if a method is defined by ":", you have to pass the table itself when using "."
+obj:method() -- ":" automatically passes the object as the first argument
+obj.method(object)-- the equivalent of the upper method
+
