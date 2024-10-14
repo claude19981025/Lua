@@ -379,10 +379,10 @@ ClassName.__index = Classname
 -- in lua, object, property and function can be described by "table" and "metatable"
 -- constructor
 function ClassName:constructor()
-  obj = {}
-  setmetatable(obj, ClassName)
-  ClassName.property1 = value1
-  ClassName.property2 = value2
+  local obj = {}
+  setmetatable(obj, ClassName) -- let obj access the class member and methods
+  obj.property1 = value1
+  obj.property2 = value2
   return obj
 end
 
@@ -395,4 +395,39 @@ obj.property
 --- if a method is defined by ":", you have to pass the table itself when using "."
 obj:method() -- ":" automatically passes the object as the first argument
 obj.method(object)-- the equivalent of the upper method
+--------------------------------------------------------------------
+[Inheritance]
+-- first define a base class
+baseClass = {}
+baseClass.__index = baseClass
+function baseClass:new()
+  local instance = {}
+  setmetatable(instance, self)
+  return instance
+end
 
+function baseClass:method1()
+end
+-- we then define the derived class
+derivedClass = baseClass:new()
+Boy.__index = Boy
+--------------------------------------------------------------------
+[Coroutine]
+-- Only one coroutine is allowed to run at any given time
+-- running coroutine will only be suspeneded if it is explicitly requested to be suspended
+coroutine.create(function()) -- create and return
+coroutine.resume() -- restart
+coruotine.yield() -- suspend
+coroutine.status() -- status
+coroutine.wrap(function) -- create coroutine and return a function
+coroutine.running() -- return a running coroutine
+[Error]
+assert(statement, "Error Message")
+-- if no error, does nothing
+-- if has error, show the error message
+error("message")
+pcall(function)
+-- check if function has error
+xpcall(function, callback)
+-- if error occru, call callback
+[Debug]

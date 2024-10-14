@@ -28,11 +28,32 @@ function Person:showAge()
 	print(self.name.." is "..self.age.." years old")	
 end
 
+
+-- perform inheritance
+Soldier = Person:new()
+-- an instance is actually create by the same mechamism as inheritance
+function Soldier:new(name, age, rank)
+	local instance = Person:new(name, age)	
+	setmetatable(instance, self) -- set Soldier as metatable for this instance
+	-- soldier is instance's metatable, 
+	self.__index = self
+	-- instance will look for Soldier
+	-- Soldier got Person as its metatable, will look for Person
+	instance.rank = rank
+	return instance
+end
+
+function Soldier:greet()
+	print("Hello, my name is "..self.name.." my rank is "..self.rank)
+end
+
+
 local p1 = Person:new("Tina", 22)
-p1:showAge()
-local p2 = Person:new("Eric", 26)
-p2:showAge()
-p1:showAge()
+p1:greet()
+
+local me = Soldier:new("Claude", 20, "Private")
+me:greet()
+me:showAge()
 -----------------------------------------------------
 --[[
 House = {height = 0}
